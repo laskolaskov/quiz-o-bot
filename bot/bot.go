@@ -14,16 +14,6 @@ func MessageCreateListener(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	t := m.ChannelID
-	//var msg string
-	/* for _, g := range g {
-		//sGuild, _ := s.Guild(g.ID)
-		//msg += sGuild.Name + "\n"
-		fmt.Println(g.Name)
-	} */
-	fmt.Printf("%v %T\n", t, t)
-	fmt.Println("test")
-
 	command, args := process(m.Content)
 
 	if isDM, _ := isDM(s, m); isDM {
@@ -37,39 +27,32 @@ func MessageCreateListener(s *discordgo.Session, m *discordgo.MessageCreate) {
 		switch command {
 		case "!categories":
 			replay(s, m, prn.ListCategories(storage.Categories()))
-		case "!help":
-			replay(s, m, prn.ListCategories(storage.Categories()))
+		case "!start":
+			start(s, m, args)
 		default:
-			fmt.Printf("\nCMD: %v ARGS: %v\n", command, args)
+			q, a, err := checkResult(m.Content)
+			if err != nil {
+				fmt.Println(err)
+				fmt.Printf("\nUnknown command - CMD: %v ARGS: %v\n\n", command, args)
+				return
+			}
+			result(s, m, q, a)
 		}
 	}
 }
 
 func GuildCreateListener(s *discordgo.Session, event *discordgo.GuildCreate) {
-	if event.Guild.Unavailable {
+	/* if event.Guild.Unavailable {
 		return
 	}
 
-	fmt.Printf("%v %T", event.Guild.Name, event.Guild.Name)
-	fmt.Println("")
-	fmt.Printf("%v %T", event.Guild.ID, event.Guild.ID)
-	fmt.Println("\n\nChannels:")
-	fmt.Println("")
-
 	for _, channel := range event.Guild.Channels {
-		fmt.Printf("%v %T", channel.Name, channel.Name)
-		fmt.Println("")
-		fmt.Printf("%v %T", channel.ID, channel.ID)
-		fmt.Println("")
-		fmt.Printf("%v %T", channel.Type, channel.Type)
-		fmt.Println("")
-		fmt.Println("")
-
 		if isTextChannel(channel) {
 			_, err := s.ChannelMessageSend(channel.ID, "Quiz-o-bot is ready for some trivia games! Send it a DM, or type '!help' in the channel to see how to start one.\nMany thanks to https://opentdb.com/ for the great free database.")
 			if err != nil {
 				fmt.Println(err)
 			}
 		}
-	}
+	} */
+	return
 }

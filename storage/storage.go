@@ -2,34 +2,59 @@ package storage
 
 import "github.com/laskolaskov/quiz-o-bot/api"
 
-type Data struct {
-	questions  []api.Question
+var games = make(map[string]*GameState)
+var categories = make([]api.Category, 0, 50)
+
+//var data = Data{games, categories}
+//var dataMap = Data{games, categories}
+
+/* type Data struct {
+	games      map[string]GameState
 	categories []api.Category
-	progress   bool
+} */
+
+type GameState struct {
+	questions []api.Question
+	result    map[string]*Result
+	progress  bool
 }
 
-var data = Data{}
-
-func Questions() []api.Question {
-	return data.questions
+type Result struct {
 }
 
-func SetQuestions(q []api.Question) {
-	data.questions = q
+func (g *GameState) Questions() []api.Question {
+	return g.questions
+}
+
+func (g *GameState) SetQuestions(q []api.Question) {
+	g.questions = q
+}
+
+func (g *GameState) Result() map[string]*Result {
+	return g.result
+}
+
+func (g *GameState) Progress() bool {
+	return g.progress
+}
+
+func (g *GameState) SetProgress(p bool) {
+	g.progress = p
 }
 
 func Categories() []api.Category {
-	return data.categories
+	return categories
 }
 
 func SetCategories(c []api.Category) {
-	data.categories = c
+	categories = c
 }
 
-func Progress() bool {
-	return data.progress
-}
-
-func SetProgress(p bool) {
-	data.progress = p
+func Game(id string) *GameState {
+	_, exists := games[id]
+	if exists {
+		return games[id]
+	}
+	games[id] = &GameState{}
+	return games[id]
 }

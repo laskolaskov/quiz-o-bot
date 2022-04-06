@@ -53,11 +53,9 @@ type QuestionResponse struct {
 }
 
 type ApiArgs struct {
-	Amount         int
-	Category       int
-	Difficulty     string
-	Help           bool
-	ListCategories bool
+	Amount     int
+	Category   int
+	Difficulty string
 }
 
 func GetCategories() ([]Category, error) {
@@ -147,10 +145,6 @@ func ParseInput(input []string) ApiArgs {
 				if e == nil {
 					apiArgs.Amount = a
 				}
-			case "help":
-				apiArgs.Help = true
-			case "listCategories":
-				apiArgs.ListCategories = true
 			}
 		}
 	}
