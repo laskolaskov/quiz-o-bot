@@ -17,13 +17,14 @@ type GameState struct {
 }
 
 type Result struct {
-	correct int
-	total   int
-	easy    Answered
-	medium  Answered
-	hard    Answered
-	name    string
-	id      string
+	correct  int
+	total    int
+	easy     Answered
+	medium   Answered
+	hard     Answered
+	name     string
+	id       string
+	answered map[int]bool
 }
 
 type Answered struct {
@@ -41,7 +42,12 @@ func (r *Result) Score() Score {
 	return Score{Name: r.name, Score: score}
 }
 
-func (r *Result) Add(q api.Question, isCorrect bool) {
+func (r *Result) Answered(index int) bool {
+	_, exists := r.answered[index]
+	return exists
+}
+
+func (r *Result) Add(q api.Question, isCorrect bool, index int) {
 	switch q.Difficulty {
 	case "easy":
 		if isCorrect {
@@ -63,6 +69,7 @@ func (r *Result) Add(q api.Question, isCorrect bool) {
 		r.hard.total++
 	}
 	r.total++
+	r.answered[index] = isCorrect
 }
 
 func (g *GameState) Questions() []api.Question {
@@ -96,6 +103,8 @@ func (g *GameState) PlayerResult(id string, name string) *Result {
 	//set player name and ID
 	g.result[id].name = name
 	g.result[id].id = id
+	//init
+	g.result[id].answered = make(map[int]bool)
 
 	return g.result[id]
 }
@@ -129,6 +138,10 @@ func Game(id string) *GameState {
 	if exists {
 		return g
 	}
+	return NewGame(id)
+}
+
+func NewGame(id string) *GameState {
 	games[id] = &GameState{
 		questions: make([]api.Question, 0),
 		result:    make(map[string]*Result),

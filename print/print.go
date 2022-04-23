@@ -51,3 +51,12 @@ func Question(index int, q api.Question) *discordgo.MessageEmbed {
 
 	return embed.MessageEmbed
 }
+
+func Starting() *discordgo.MessageEmbed {
+	embed := NewEmbed().
+		SetTitle(fmt.Sprintf("Game starts!")).
+		SetDescription(fmt.Sprintf("Prepare your brains...")).
+		SetColor(0x0000ff)
+
+	return embed.MessageEmbed
+}

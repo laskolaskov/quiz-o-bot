@@ -25,7 +25,9 @@ var inputMap = map[string]string{
 	"--help":            "help",
 	"?":                 "help",
 	"-lc":               "listCategories",
-	"--list-categories": "listCategories"}
+	"--list-categories": "listCategories",
+	"-t":                "time",
+	"--time":            "time"}
 
 type Category struct {
 	Id   int
@@ -56,6 +58,7 @@ type ApiArgs struct {
 	Amount     int
 	Category   int
 	Difficulty string
+	Time       int
 }
 
 func GetCategories() ([]Category, error) {
@@ -145,9 +148,18 @@ func ParseInput(input []string) ApiArgs {
 				if e == nil {
 					apiArgs.Amount = a
 				}
+			case "time":
+				t, e := strconv.Atoi(parameter[1])
+				//t, e := strconv.ParseInt(parameter[1], 10, 64)
+				if e == nil {
+					apiArgs.Time = t
+				}
 			}
 		}
 	}
-
+	//set default time
+	if apiArgs.Time == 0 {
+		apiArgs.Time = 25
+	}
 	return apiArgs
 }

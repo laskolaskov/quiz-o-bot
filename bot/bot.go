@@ -36,7 +36,6 @@ func MessageCreateListener(s *discordgo.Session, m *discordgo.MessageCreate) {
 		default:
 			q, a, err := checkAnswer(m.Content)
 			if err != nil {
-				fmt.Println(err)
 				fmt.Printf("\nUnknown command - CMD: %v ARGS: %v\n\n", command, args)
 				return
 			}

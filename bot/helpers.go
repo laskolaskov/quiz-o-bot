@@ -38,13 +38,22 @@ func process(m string) (string, string) {
 	return command, args
 }
 
-//replay to DM with string message
+//replay with DM string message
 func replay(s *discordgo.Session, m *discordgo.MessageCreate, msg string) {
 	ch, err := s.UserChannelCreate(m.Author.ID)
 	if err != nil {
 		fmt.Println("Error while creating DM channel:", err)
 	}
 	s.ChannelMessageSend(ch.ID, msg)
+}
+
+//replay with DM embed
+func replayEmbed(s *discordgo.Session, m *discordgo.MessageCreate, e *discordgo.MessageEmbed) {
+	ch, err := s.UserChannelCreate(m.Author.ID)
+	if err != nil {
+		fmt.Println("Error while creating DM channel:", err)
+	}
+	s.ChannelMessageSendEmbed(ch.ID, e)
 }
 
 func checkAnswer(m string) (int, int, error) {
