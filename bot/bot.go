@@ -29,14 +29,18 @@ func MessageCreateListener(s *discordgo.Session, m *discordgo.MessageCreate) {
 			replay(s, m, prn.ListCategories(storage.Categories()))
 		case "!start":
 			start(s, m, args)
+		case "!result":
+			result(s, m)
+		case "!myResult":
+			myResult(s, m)
 		default:
-			q, a, err := checkResult(m.Content)
+			q, a, err := checkAnswer(m.Content)
 			if err != nil {
 				fmt.Println(err)
 				fmt.Printf("\nUnknown command - CMD: %v ARGS: %v\n\n", command, args)
 				return
 			}
-			result(s, m, q, a)
+			processAnswer(s, m, q, a)
 		}
 	}
 }

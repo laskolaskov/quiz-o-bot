@@ -47,7 +47,7 @@ func replay(s *discordgo.Session, m *discordgo.MessageCreate, msg string) {
 	s.ChannelMessageSend(ch.ID, msg)
 }
 
-func checkResult(m string) (int, int, error) {
+func checkAnswer(m string) (int, int, error) {
 	if "#" != m[:1] {
 		return 0, 0, errors.New("not an answer command: missing '#' prefix")
 	}
