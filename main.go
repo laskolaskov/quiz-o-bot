@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"log"
 	"os"
 	"os/signal"
@@ -42,37 +41,11 @@ func main() {
 	}
 
 	// Wait here until CTRL-C or other term signal is received.
-	fmt.Println("Quiz-o-bot started! Press CTRL-C to exit.")
+	log.Println("Quiz-o-bot started! Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
 
 	// Cleanly close down the Discord session.
 	discord.Close()
-
-	//apiArgs := api.ParseInput(os.Args[1:len(os.Args)])
-
-	/* if apiArgs.Help {
-		fmt.Print(prn.Help())
-		os.Exit(0)
-	} */
-
-	/* if apiArgs.ListCategories {
-		fmt.Print(prn.ListCategories(categories))
-		os.Exit(0)
-	} */
-
-	/* questions, err := api.GetQuestions(apiArgs.Amount, apiArgs.Category, apiArgs.Difficulty)
-	if err != nil {
-		log.Fatal(err)
-	} */
-
-	/* for k, c := range categories {
-		//fmt.Println(c.Id, c.Name)
-		fmt.Sprintln(k, c)
-	} */
-
-	/* for _, q := range questions {
-		utils.PrintStruct(q)
-	} */
 }

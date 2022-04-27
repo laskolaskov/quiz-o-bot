@@ -150,7 +150,6 @@ func ParseInput(input []string) ApiArgs {
 				}
 			case "time":
 				t, e := strconv.Atoi(parameter[1])
-				//t, e := strconv.ParseInt(parameter[1], 10, 64)
 				if e == nil {
 					apiArgs.Time = t
 				}
@@ -158,7 +157,7 @@ func ParseInput(input []string) ApiArgs {
 		}
 	}
 	//set default time
-	if apiArgs.Time == 0 {
+	if apiArgs.Time <= 0 {
 		apiArgs.Time = 25
 	}
 	return apiArgs

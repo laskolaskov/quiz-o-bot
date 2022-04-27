@@ -2,7 +2,7 @@ package bot
 
 import (
 	"errors"
-	"fmt"
+	"log"
 	"math/rand"
 	"strconv"
 	"strings"
@@ -42,7 +42,8 @@ func process(m string) (string, string) {
 func replay(s *discordgo.Session, m *discordgo.MessageCreate, msg string) {
 	ch, err := s.UserChannelCreate(m.Author.ID)
 	if err != nil {
-		fmt.Println("Error while creating DM channel:", err)
+		log.Println("Error while creating DM channel:", err)
+		return
 	}
 	s.ChannelMessageSend(ch.ID, msg)
 }
@@ -51,7 +52,8 @@ func replay(s *discordgo.Session, m *discordgo.MessageCreate, msg string) {
 func replayEmbed(s *discordgo.Session, m *discordgo.MessageCreate, e *discordgo.MessageEmbed) {
 	ch, err := s.UserChannelCreate(m.Author.ID)
 	if err != nil {
-		fmt.Println("Error while creating DM channel:", err)
+		log.Println("Error while creating DM channel:", err)
+		return
 	}
 	s.ChannelMessageSendEmbed(ch.ID, e)
 }

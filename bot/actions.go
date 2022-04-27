@@ -47,12 +47,11 @@ func start(s *discordgo.Session, m *discordgo.MessageCreate, args string) {
 
 		s.ChannelMessageSendEmbed(channelID, print.Question(i, q))
 		game.SetCurrent(i)
-		fmt.Println("timer :::", time.Duration(input.Time)*time.Second)
 
 		time.Sleep(time.Duration(input.Time) * time.Second)
 	}
 
-	//TODO: game ended message
+	s.ChannelMessageSendEmbed(channelID, print.Ended())
 	result(s, m)
 	game.SetProgress(false)
 }
@@ -90,15 +89,17 @@ func processAnswer(s *discordgo.Session, m *discordgo.MessageCreate, questionInd
 	q := questions[questionIndex]
 	isCorrect := isCorrect(questions, questionIndex, answerIndex)
 
+	//set the ansewer
+	q.Answer = q.Incorrect_answers[answerIndex]
+
 	//process result
 	r.Add(q, isCorrect, questionIndex)
 
 	if isCorrect {
-		replay(s, m, "correct !!") //TODO: the actual message
+		replayEmbed(s, m, print.Correct(q))
 	} else {
-		replay(s, m, "wrong ! correct is: "+questions[questionIndex].Correct_answer) //TODO: the actual message
+		replayEmbed(s, m, print.Incorrect(q))
 	}
-	fmt.Println(game.PlayerResult(m.Author.ID, m.Author.Username))
 }
 
 func result(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -108,8 +109,10 @@ func result(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 func myResult(s *discordgo.Session, m *discordgo.MessageCreate) {
 	r := storage.Game(m.ChannelID).PlayerResult(m.Author.ID, m.Author.Username)
-	fmt.Println("--- printing player result ---")
-	fmt.Println(r)
 	cn, _ := s.Channel(m.ChannelID)
-	replay(s, m, "Here will be your result from channel '"+cn.Name+"' !") //TODO the actual message
+	replayEmbed(s, m, print.Result(r, cn.Name))
+}
+
+func testAction(s *discordgo.Session, m *discordgo.MessageCreate) {
+	replayEmbed(s, m, print.TestEmbed())
 }

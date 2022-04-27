@@ -17,19 +17,19 @@ type GameState struct {
 }
 
 type Result struct {
-	correct  int
-	total    int
-	easy     Answered
-	medium   Answered
-	hard     Answered
+	Correct  int
+	Total    int
+	Easy     Answered
+	Medium   Answered
+	Hard     Answered
 	name     string
 	id       string
 	answered map[int]bool
 }
 
 type Answered struct {
-	correct int
-	total   int
+	Correct int
+	Total   int
 }
 
 type Score struct {
@@ -38,7 +38,7 @@ type Score struct {
 }
 
 func (r *Result) Score() Score {
-	score := r.easy.correct*1 + r.medium.correct*3 + r.hard.correct*5
+	score := r.Easy.Correct*1 + r.Medium.Correct*3 + r.Hard.Correct*5
 	return Score{Name: r.name, Score: score}
 }
 
@@ -51,24 +51,24 @@ func (r *Result) Add(q api.Question, isCorrect bool, index int) {
 	switch q.Difficulty {
 	case "easy":
 		if isCorrect {
-			r.easy.correct++
-			r.correct++
+			r.Easy.Correct++
+			r.Correct++
 		}
-		r.easy.total++
+		r.Easy.Total++
 	case "medium":
 		if isCorrect {
-			r.medium.correct++
-			r.correct++
+			r.Medium.Correct++
+			r.Correct++
 		}
-		r.medium.total++
+		r.Medium.Total++
 	case "hard":
 		if isCorrect {
-			r.hard.correct++
-			r.correct++
+			r.Hard.Correct++
+			r.Correct++
 		}
-		r.hard.total++
+		r.Hard.Total++
 	}
-	r.total++
+	r.Total++
 	r.answered[index] = isCorrect
 }
 
