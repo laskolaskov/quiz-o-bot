@@ -15,13 +15,15 @@ import (
 
 func main() {
 
-	godotenv.Load()
+	godotenv.Overload()
 
 	//create discord connection
 	discord, err := discordgo.New("Bot " + os.Getenv("BOT_TOKEN"))
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	defer discord.Close()
 
 	//load data
 	categories, err := api.GetCategories()
@@ -45,7 +47,4 @@ func main() {
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
-
-	// Cleanly close down the Discord session.
-	discord.Close()
 }
