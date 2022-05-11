@@ -24,6 +24,15 @@ func isDM(s *discordgo.Session, m *discordgo.MessageCreate) (bool, error) {
 	return channel.Type == discordgo.ChannelTypeDM, nil
 }
 
+func isBot(s *discordgo.Session, m *discordgo.MessageCreate) (bool, error) {
+	u, err := s.User(m.Author.ID)
+	if err != nil {
+		log.Println("Error while getting user data:", err)
+		return false, err
+	}
+	return u.Bot, nil
+}
+
 func isTextChannel(c *discordgo.Channel) bool {
 	return c.Type == discordgo.ChannelTypeGuildText
 }

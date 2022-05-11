@@ -14,12 +14,16 @@ func MessageCreateListener(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
+	if isBot, _ := isBot(s, m); isBot {
+		return
+	}
+
 	command, args := process(m.Content)
 
 	if isDM, _ := isDM(s, m); isDM {
 		switch command {
 		case "!categories":
-			replay(s, m, print.ListCategories(storage.Categories()))
+			replay(s, m, print.ListCategories(storage.Categories())) //TODO: turn into embed
 		case "!test":
 			testAction(s, m)
 		default:
